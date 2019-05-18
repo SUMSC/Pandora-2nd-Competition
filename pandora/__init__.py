@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 
 
 def create_app():
@@ -12,17 +12,17 @@ def create_app():
         """
         return "Hello, world!"
 
-    # TODO: 捕获 404 错误，返回 404.html
     @app.errorhandler(404)
     def page_not_found(error):
         """
         以此项目中的404.html作为此Web Server工作时的404错误页
         """
-        pass
+        from flask import render_template
+        return render_template('404.html'), 404
 
     # TODO: 完成接受 HTTP_URL 的 picture_reshape
     # TODO: 完成接受相对路径的 picture_reshape
-    @app.route('/pic', methods=['POST'])
+    @app.route('/pic', methods=['GET'])
     def picture_reshape():
         """
         **请使用 PIL 进行本函数的编写**
@@ -42,9 +42,34 @@ def create_app():
         }
         """
         import PIL
-        pass
+        from PIL import Image
+        import os
+        import requests
+        import base64
+        from io import BytesIO
+        import hashlib
 
-    # TODO: 爬取 996.icu Repo，获取企业名单
+        target_h = 100
+        target_w = 100
+
+        url = request.args.get('b64_url')
+        if os.path.exists(os.path.join(app.root_path, url)):
+            with open(os.path.join(app.root_path, url), 'r') as fp:
+                simg = fp.readline().strip()
+        else:
+            simg = requests.get(url).text
+        img_data = base64.b64decode(simg)
+        # 有时可能用到的urlencode
+        # img_data = img_data.replace("%2B", "+").replace("%3D", "=").replace("%2F", "/")
+        image = Image.open(BytesIO(img_data))
+        image = image.resize((target_h, target_w), Image.ANTIALIAS)
+        output_buffer = BytesIO()
+        image.save(output_buffer, format='PNG')
+        byte_data = output_buffer.getvalue()
+        base64_str = base64.b64encode(byte_data)
+
+        return jsonify({"md5": hashlib.md5(image.tobytes()).hexdigest(), "base64_picture": base64_str.decode('utf8')})
+
     @app.route('/996')
     def company_996():
         """
@@ -58,6 +83,17 @@ def create_app():
             "description": <description 描述>
         }, ...]
         """
-        pass
+        from bs4 import BeautifulSoup
+        import requests
+
+        html = requests.get("https://github.com/996icu/996.ICU/blob/master/blacklist/README.md",
+                            proxies={"https": "127.0.0.1:1080"}).text
+        soup = BeautifulSoup(html, 'lxml')
+        # print(soup.find(id='readme').article.find_all('table')[1].tbody.find_all('tr')[0].find_all('td')[0].text)
+        # res=[[k.text for k in j.find_all('td')] for j in [i for i in soup.find(id='readme').article.find_all('table')[1].tbody.find_all('tr')]]
+        res = [dict(zip(["city", "company", "exposure_time", "description"], [j.text for j in i.find_all('td')][:4]))
+               for i in
+               soup.find(id='readme').article.find_all('table')[1].tbody.find_all('tr')]
+        return jsonify(res)
 
     return app
