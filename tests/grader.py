@@ -5,7 +5,6 @@ from enum import Enum
 
 import pytest
 import requests
-from pprint import pprint as print
 
 class RESULT(Enum):
     PASSED = "passed"
@@ -82,7 +81,6 @@ def post_grade(id:str):
         "error_log": log
     })
     print("id: {}, status: {}".format(id,  RESULT.PASSED.value if resp.status_code == 200 and not resp.json().get('error') else RESULT.FAILURE.value))
-    # print(resp.json())
     exit(0 if resp.status_code == 200 and not resp.json().get('error') else 1)
     
     
