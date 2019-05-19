@@ -34,7 +34,7 @@ python -m pip install -r requirements.txt
 
 4. 测试依赖是否安装成功；
 ```shell
-pytest -v
+python -m pytest -v
 ```
 
 如果出现类似以下结果，则说明依赖安装成功：
@@ -51,8 +51,12 @@ flask run
 
 ## 注意事项
 
-- 本项目已经提供的依赖：
+- **请注意，参赛者只能修改`pandora`文件夹内的内容，其余修改无效**。
+
+- 本项目提供了一些 Python 第三方库，参赛者不能添加其他依赖：
+
 > 以下为主要依赖，细节请参考`requirements.txt`
+
 ```
 Flask==1.0.2            # Web Server Framework
 Pillow==6.0.0           # Image Process Lib
@@ -63,9 +67,4 @@ pyquery==1.4.0          # HTML Parse Lib
 Markdown==3.1           # Markdown Parse
 pprint==0.1             # Pretty Print
 pytest==4.5.0           # Python Unit Test
-```
-
-- 如果需要添加依赖，请在提交到 Github 之前在根目录将依赖冻结：
-```shell
-python -m pip freeze > requirements.txt
 ```
