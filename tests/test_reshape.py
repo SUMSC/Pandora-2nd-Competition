@@ -31,7 +31,7 @@ def answer(url: str, app) -> dict:
 def test_reshape_file_md5(client, app):
     url = "img.txt"
     res = client.get('/pic?b64_url={}'.format(url))
-    assert res.json.get('md5') == answer(url=url, app=app).get('md5')
+    assert res.json.get('md5').lower() == answer(url=url, app=app).get('md5').lower()
 
 
 def test_reshape_file_b64(client, app):
@@ -43,7 +43,9 @@ def test_reshape_file_b64(client, app):
 def test_reshape_http_md5(client, app):
     url = "https://oss.liontao.xin/img.txt"
     res = client.get('/pic?b64_url={}'.format(url))
-    assert res.json.get('md5') == answer(url=url, app=app).get('md5')
+    print(res.json.get('md5'))
+    assert res.json.get('md5').lower() == answer(url=url, app=app).get('md5').lower()
+
 
 def test_reshape_http_b64(client, app):
     url = "https://oss.liontao.xin/img.txt"

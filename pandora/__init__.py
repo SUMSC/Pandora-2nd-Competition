@@ -7,6 +7,7 @@ def create_app():
     @app.route('/')
     def index():
         """
+        20'
         只有 Hello World 的首页
         :return:
         """
@@ -15,6 +16,7 @@ def create_app():
     @app.errorhandler(404)
     def page_not_found(error):
         """
+        10'
         以此项目中的404.html作为此Web Server工作时的404错误页
         """
         from flask import render_template
@@ -25,6 +27,8 @@ def create_app():
     @app.route('/pic', methods=['GET'])
     def picture_reshape():
         """
+        40' (20'ssh + 10' file + 10' http)
+
         **请使用 PIL 进行本函数的编写**
         获取请求的 query_string 中携带的 b64_url 值
         从 b64_url 下载一张图片的 base64 编码，reshape 转为 100*100，并开启抗锯齿（ANTIALIAS）
@@ -73,6 +77,7 @@ def create_app():
     @app.route('/996')
     def company_996():
         """
+        30'
         从 github.com/996icu/996.ICU 项目中获取所有的已确认是996的公司名单，并
 
         :return: 以 JSON List 的格式返回，格式如下
