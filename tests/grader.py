@@ -80,15 +80,17 @@ def post_grade(id: str, repo: str):
         "X-DB-Auth": "whatsmydbauth"
     }
     status, log = do_test(id)
-    resp = requests.post(url, headers=headers, json={
+    data = {
         "id_tag": id,
         "test_status": status,
         "error_log": log,
         "repo": repo,
-    })
+    }
+    resp = requests.post(url, headers=headers, json=data)
     print("id: {}, status: {}".format(id, RESULT.PASSED.value if resp.status_code == 200 and not resp.json().get(
         'error') else RESULT.FAILURE.value))
     print(resp.text)
+    print(data)
     exit(0 if resp.status_code == 200 and not resp.json().get('error') else 1)
 
 
