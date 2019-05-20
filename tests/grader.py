@@ -88,6 +88,7 @@ def post_grade(id: str, repo: str):
     })
     print("id: {}, status: {}".format(id, RESULT.PASSED.value if resp.status_code == 200 and not resp.json().get(
         'error') else RESULT.FAILURE.value))
+    print(resp.text)
     exit(0 if resp.status_code == 200 and not resp.json().get('error') else 1)
 
 
