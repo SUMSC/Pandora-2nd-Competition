@@ -82,13 +82,16 @@ def post_grade(id: str, repo: str):
     status, log = do_test(id)
     data = {
         "id_tag": id,
-        "test_status": status,
+        "test_status": RESULT.PASSED.value if status == 100 else RESULT.FAILURE.value,
+        "test_grade": status,
         "error_log": log,
         "repo": repo,
     }
     resp = requests.post(url, headers=headers, json=data)
-    print("id: {}, status: {}".format(id, RESULT.PASSED.value if resp.status_code == 200 and not resp.json().get(
-        'error') else RESULT.FAILURE.value))
+    print("id: {}, db_status: {}, grade: {}".
+          format(id,
+                 RESULT.PASSED.value if resp.status_code == 200 and not resp.json().get(
+                     'error') else RESULT.FAILURE.value, status))
     print(resp.text)
     print(data)
     exit(0 if resp.status_code == 200 and not resp.json().get('error') else 1)
