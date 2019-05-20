@@ -33,12 +33,12 @@ def create_app():
         获取请求的 query_string 中携带的 b64_url 值
         从 b64_url 下载一张图片的 base64 编码，reshape 转为 100*100，并开启抗锯齿（ANTIALIAS）
         对 reshape 后的图片分别使用 base64 与 md5 进行编码，以 JSON 格式返回，参数与返回格式如下
-        
+
         :param: b64_url: 
             本题的 b64_url 以 arguments 的形式给出，可能会出现两种输入
             1. 一个 HTTP URL
             2. 一个指向 TXT 文本文件的相对路径，该 TXT 文本文件包含一个 base64 字符串
-        
+
         :return: JSON
         {
             "md5": <图片reshape后的md5编码: str>,

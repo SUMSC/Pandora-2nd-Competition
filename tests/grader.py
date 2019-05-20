@@ -49,7 +49,7 @@ def do_unit_test(file, func, score, error_log):
         return 0, error_log
 
 
-def test_ssh(id: str) -> int:
+def test_ssh(id: str) -> {int, str}:
     res = requests.get("https://pandora.sumsc.xin/ssh?id_tag={}".format(id))
     if res.json().get('message') and os.path.exists('../pandora/img.txt') and os.path.isfile('../pandora/img.txt'):
         return 20, "测试成功"
@@ -71,7 +71,7 @@ def do_test(id: str):
     return res, res_log
 
 
-def post_grade(id: str):
+def post_grade(id: str, repo: str):
     """
     接受用户学号进行判题
     """
@@ -82,8 +82,9 @@ def post_grade(id: str):
     status, log = do_test(id)
     resp = requests.post(url, headers=headers, json={
         "id_tag": id,
-        "test_status": RESULT.PASSED.value if status == 100 else RESULT.FAILURE.value,
-        "error_log": log
+        "test_status": status,
+        "error_log": log,
+        "repo": repo,
     })
     print("id: {}, status: {}".format(id, RESULT.PASSED.value if resp.status_code == 200 and not resp.json().get(
         'error') else RESULT.FAILURE.value))
@@ -93,6 +94,6 @@ def post_grade(id: str):
 if __name__ == "__main__":
     # 接受一个命令行参数 id_tag
     if sys.argv[1] == '--help':
-        print("python grade.py [ID_TAG]")
+        print("python grade.py [ID_TAG] [repo]")
     else:
-        post_grade(sys.argv[1])
+        post_grade(sys.argv[1], sys.argv[2])
