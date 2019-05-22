@@ -25,7 +25,7 @@ def answer(url: str, app) -> dict:
     byte_data = output_buffer.getvalue()
     base64_str = base64.b64encode(byte_data)
 
-    return {"md5": hashlib.md5(image.tobytes()).hexdigest(), "base64_picture": base64_str.decode('utf8')}
+    return {"md5": hashlib.md5(byte_data).hexdigest(), "base64_picture": base64_str.decode('utf8')}
 
 
 def test_reshape_file_md5(client, app):
