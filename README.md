@@ -1,2 +1,7 @@
-# Pandora-2nd-Competition
-Pandora Box Challenge 2ND Competition
+# 魔盒挑战第二期——参考答案
+
+这个repo里的内容是Azure判题机所用的测试样例
+
+`pandora`文件夹中是我自己做的一遍题目，可能有部分错误并未修改。
+
+`tests`文件夹中是用来打分的测试样例，与线上判题器所用一致。
