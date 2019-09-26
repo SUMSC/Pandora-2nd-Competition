@@ -46,7 +46,7 @@ python -m pytest -v
 
 > **PS: 运行 Flask**
 ```shell
-flask run
+python -m flask run
 ```
 
 ## 注意事项
@@ -67,4 +67,9 @@ pyquery==1.4.0          # HTML Parse Lib
 Markdown==3.1           # Markdown Parse
 pprint==0.1             # Pretty Print
 pytest==4.5.0           # Python Unit Test
+```
+
+- 如果需要添加依赖，请在提交到 Github 之前在根目录将依赖冻结：
+```shell
+python -m pip freeze > requirements.txt
 ```
